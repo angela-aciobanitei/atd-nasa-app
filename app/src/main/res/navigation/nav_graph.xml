@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@string/apod">
+
+    <fragment
+        android:id="@+id/apod"
+        android:label="@string/apod"
+        android:name="com.ang.acb.nasaapp.ui.apod.ApodFragment"
+        tools:layout="@layout/fragment_apod">
+    </fragment>
+
+    <fragment
+        android:id="@+id/mars_search"
+        android:label="@string/mars"
+        android:name="com.ang.acb.nasaapp.ui.mars.MarsSearchFragment"
+        tools:layout="@layout/fragment_mars_search">
+        <action
+            android:id="@+id/action_mars_search_to_mars_images"
+            app:destination="@id/mars_images"
+            app:popUpTo="@+id/mars_search">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/mars_images"
+        android:label="@string/mars"
+        android:name="com.ang.acb.nasaapp.ui.mars.MarsImagesFragment"
+        tools:layout="@layout/fragment_mars_images">
+    </fragment>
+
+    <fragment
+        android:id="@+id/earth"
+        android:label="@string/earth"
+        android:name="com.ang.acb.nasaapp.ui.earth.EarthImageFragment"
+        tools:layout="@layout/fragment_earth_image">
+    </fragment>
+
+</navigation>

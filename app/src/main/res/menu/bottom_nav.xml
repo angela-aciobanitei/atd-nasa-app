@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/apod"
+        android:title="@string/apod"
+        android:icon="@drawable/ic_photo" />
+
+    <item
+        android:id="@+id/mars_search"
+        android:title="@string/mars"
+        android:icon="@drawable/ic_collections" />
+
+    <item
+        android:id="@+id/earth"
+        android:title="@string/earth"
+        android:icon="@drawable/ic_language" />
+
+</menu>
