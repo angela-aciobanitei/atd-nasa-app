@@ -15,6 +15,7 @@ import androidx.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.databinding.FragmentMarsPhotoBinding;
@@ -25,6 +26,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -59,20 +62,22 @@ public class MarsPhotoFragment extends Fragment {
             marsPhotoId = getArguments().getLong(ARG_MARS_PHOTO_ROOM_ID);
         }
 
-        // TODO postponeEnterTransition();
-        // TODO setSharedElementEnterTransition(TransitionInflater.from(getContext())
-        //  .inflateTransition(android.R.transition.move));
-
+        // Temporarily prevent the shared element transition from starting.
+        postponeEnterTransition();
+        setSharedElementEnterTransition(TransitionInflater.from(getContext())
+                .inflateTransition(android.R.transition.move));
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get an instance of the binding class.
         binding = FragmentMarsPhotoBinding.inflate(inflater, container, false);
 
-        // Set the string value of the pin ID as the unique transition name
+        // Set the string value of the Mars Photo ID as the unique transition name
         // for the image view that will be used in the shared element transition.
-        // TODO ViewCompat.setTransitionName(binding.marsPhoto, String.valueOf(marsPhotoId));
+        ViewCompat.setTransitionName(binding.marsPhoto, String.valueOf(marsPhotoId));
+
         return binding.getRoot();
     }
 
@@ -108,7 +113,7 @@ public class MarsPhotoFragment extends Fragment {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                 Target<Bitmap> target, boolean isFirstResource) {
-                        // TODO startPostponedEnterTransition();
+                        schedulePostponedEnterTransition();
                         return false;
                     }
 
@@ -116,14 +121,31 @@ public class MarsPhotoFragment extends Fragment {
                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
                                                    com.bumptech.glide.load.DataSource dataSource,
                                                    boolean isFirstResource) {
-                        // TODO startPostponedEnterTransition();
+                        schedulePostponedEnterTransition();
                         return false;
                     }
                 })
                 .into(binding.marsPhoto);
     }
 
+    private void schedulePostponedEnterTransition() {
+        // Before calling startPostponedEnterTransition(), make sure that the
+        // view is drawn first using ViewTreeObserver's OnPreDrawListener.
+        // See: https://www.androiddesignpatterns.com/2015/03/activity-postponed-shared-element-transitions-part3b.html
+        binding.getRoot().getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        binding.getRoot().getViewTreeObserver()
+                                .removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                }
+        );
+    }
+
     private MainActivity getHostActivity(){
-        return  (MainActivity) getActivity();
+        return (MainActivity) getActivity();
     }
 }

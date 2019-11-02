@@ -2,6 +2,7 @@ package com.ang.acb.nasaapp.ui.common;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -10,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 
 import com.ang.acb.nasaapp.R;
+import com.ang.acb.nasaapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
@@ -23,6 +25,8 @@ import dagger.android.support.HasSupportFragmentInjector;
  * An activity that inflates a layout that has a NavHostFragment.
  */
 public class MainActivity extends AppCompatActivity  implements HasSupportFragmentInjector {
+
+    private ActivityMainBinding binding;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -41,25 +45,32 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         // objects, inject as early as possible.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        // Inflate view and obtain an instance of the binding class.
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        // Specify the current activity as the lifecycle owner.
+        binding.setLifecycleOwner(this);
+
+        // Setup toolbar
+        setSupportActionBar(binding.mainToolbar);
 
         setupBottomNavigationView();
     }
 
     private void setupBottomNavigationView() {
         // See: https://www.raywenderlich.com/4332831-navigation-component-for-android-part-2-graphs-and-deep-links
-        BottomNavigationView bottomNavigationView = findViewById(R.id.main_bottom_navigation);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         ActionBar actionBar = getSupportActionBar();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.apod || destination.getId() == R.id.mars_photo_details) {
+            if (destination.getId() == R.id.mars_photo_details) {
                 if(actionBar != null) actionBar.hide();
             } else {
                 if(actionBar != null) actionBar.show();
             }
         });
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        NavigationUI.setupWithNavController(binding.mainBottomNavigation, navController);
         NavigationUI.setupActionBarWithNavController(this, navController);
     }
 

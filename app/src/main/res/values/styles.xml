@@ -2,11 +2,15 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="BaseTheme"/>
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <!--Toolbar themes. -->
+    <style name="AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
 
 </resources>

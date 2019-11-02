@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:contentDescription="@string/rover_image"
-            app:setImage="@{marsPhoto.imgSrc}"
             app:toggleVisibility="@{marsPhoto.imgSrc != null}"
             tools:src="@tools:sample/backgrounds/scenic"/>
 

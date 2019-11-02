@@ -76,15 +76,16 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             // Bind data for this item.
             binding.setMarsPhoto(marsPhoto);
 
-            // TODO Set the string value of the Mars Photo ID as the unique transition name
+            // Set the string value of the Mars Photo ID as the unique transition name
             // for the image view that will be used in the shared element transition.
-            // ViewCompat.setTransitionName(binding.ivMarsPhoto, String.valueOf(marsPhoto.getId()));
+            ViewCompat.setTransitionName(binding.ivMarsPhoto,
+                    String.valueOf(marsPhoto.getId()));
 
             GlideApp.with(binding.ivMarsPhoto.getContext())
                     // Calling GlideApp.with() returns a RequestBuilder.
-                    // By default you get a Drawable RequestBuilder, but
+                    // By default you get a <Drawable> RequestBuilder, but
                     // you can change the requested type using as... methods.
-                    // For example, asBitmap() returns a Bitmap RequestBuilder.
+                    // For example, asBitmap() returns a <Bitmap> RequestBuilder.
                     .asBitmap()
                     .load(marsPhoto.getImgSrc())
                     // Tell Glide not to use its standard crossfade animation.

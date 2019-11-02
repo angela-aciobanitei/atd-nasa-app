@@ -15,7 +15,6 @@
 
     <fragment
         android:id="@+id/mars_search"
-        android:label="@string/mars"
         android:name="com.ang.acb.nasaapp.ui.mars.MarsSearchFragment"
         tools:layout="@layout/fragment_mars_search">
         <action

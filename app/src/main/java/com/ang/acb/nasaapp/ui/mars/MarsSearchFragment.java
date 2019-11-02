@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionInflater;
 
 import android.os.IBinder;
 import android.view.KeyEvent;
@@ -32,6 +34,9 @@ import com.ang.acb.nasaapp.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
@@ -44,6 +49,7 @@ public class MarsSearchFragment extends Fragment {
     private FragmentMarsSearchBinding binding;
     private MarsPhotosAdapter marsPhotosAdapter;
     private MarsSearchViewModel marsSearchViewModel;
+    private AtomicBoolean isEnterTransitionStarted;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -59,7 +65,8 @@ public class MarsSearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get in instance of the binding class.
         binding = FragmentMarsSearchBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -69,11 +76,18 @@ public class MarsSearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setupToolbarTitle();
         initViewModel();
+        prepareTransition();
         initAdapter();
         populateUi();
         initSearchInputListener();
         handleRetryEvents();
+    }
+
+    private void setupToolbarTitle() {
+        ActionBar actionBar = getHostActivity().getSupportActionBar();
+        if (actionBar != null) actionBar.setTitle(getString(R.string.mars_search_toolbar_title));
     }
 
     private void initViewModel() {
@@ -90,24 +104,51 @@ public class MarsSearchFragment extends Fragment {
         marsPhotosAdapter = new MarsPhotosAdapter(new MarsPhotosAdapter.MarsPhotoListener() {
             @Override
             public void onPhotoItemClick(MarsPhoto marsPhoto, ImageView sharedImage) {
-                // On photo click navigate to mars photo details fragment.
-                // Create the shared element transition extras.
-                // FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                //        .addSharedElement(sharedImage, sharedImage.getTransitionName())
-                //        .build();
+                // On photo click navigate to mars photo details fragment
+                // passing the shared element transition extras to the Navigator.
+                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                        .addSharedElement(sharedImage, sharedImage.getTransitionName())
+                        .build();
                 Bundle args = new Bundle();
                 args.putLong(ARG_MARS_PHOTO_ROOM_ID, marsPhoto.getId());
                 NavHostFragment.findNavController(MarsSearchFragment.this)
                         .navigate(R.id.action_mars_search_to_mars_photo_details,
-                                args, null, null);
+                                args, null, extras);
             }
 
             @Override
             public void onPhotoLoaded() {
-                // TODO startPostponedEnterTransition();
+                schedulePostponedEnterTransition();
             }
         });
         binding.rvMarsPhotos.setAdapter(marsPhotosAdapter);
+    }
+
+    private void prepareTransition() {
+        isEnterTransitionStarted = new AtomicBoolean();
+        setEnterTransition(TransitionInflater.from(getContext())
+                .inflateTransition(android.R.transition.move));
+        setSharedElementEnterTransition(TransitionInflater.from(getContext())
+                .inflateTransition(android.R.transition.move));
+    }
+
+    private void schedulePostponedEnterTransition() {
+        if (isEnterTransitionStarted.getAndSet(true)) return;
+        // Before calling startPostponedEnterTransition(), make sure that
+        // the view is drawn using ViewTreeObserver's OnPreDrawListener.
+        // https://medium.com/@ayushkhare/shared-element-transitions-4a645a30c848
+        binding.rvMarsPhotos.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        binding.rvMarsPhotos.getViewTreeObserver()
+                                .removeOnPreDrawListener(this);
+                        // Parent has been drawn. Start transition.
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                }
+        );
     }
 
 
@@ -142,13 +183,13 @@ public class MarsSearchFragment extends Fragment {
         if (activity != null) {
             InputMethodManager inputMethodManager = (InputMethodManager)
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+            Objects.requireNonNull(inputMethodManager)
+                    .hideSoftInputFromWindow(windowToken, 0);
         }
     }
 
     private void populateUi() {
         marsSearchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result -> {
-            // TODO postponeEnterTransition();
             binding.setResource(result);
             int searchCount = (result == null || result.data == null) ? 0 : result.data.size();
             binding.setSearchCount(searchCount);
@@ -156,6 +197,8 @@ public class MarsSearchFragment extends Fragment {
                 marsPhotosAdapter.updateData(result.data);
             }
             binding.executePendingBindings();
+            // Delay transition until all data is loaded.
+            postponeEnterTransition();
         });
     }
 
@@ -165,6 +208,6 @@ public class MarsSearchFragment extends Fragment {
     }
 
     private MainActivity getHostActivity(){
-        return  (MainActivity) getActivity();
+        return (MainActivity) getActivity();
     }
 }

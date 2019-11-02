@@ -6,8 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -16,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ang.acb.nasaapp.R;
-import com.ang.acb.nasaapp.data.vo.Resource;
-import com.ang.acb.nasaapp.data.vo.apod.Apod;
 import com.ang.acb.nasaapp.databinding.FragmentApodBinding;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
 
@@ -57,8 +55,14 @@ public class ApodFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setupToolbarTitle();
         initViewModel();
         observeResult();
+    }
+
+    private void setupToolbarTitle() {
+        ActionBar actionBar = getHostActivity().getSupportActionBar();
+        if (actionBar != null) actionBar.setTitle(getString(R.string.apod_toolbar_title));
     }
 
     private void initViewModel() {
