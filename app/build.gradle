@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'NASA_API_KEY', NASA_API_KEY
+    }
     // Enable data binding
     dataBinding {
         enabled = true

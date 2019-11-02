@@ -1,35 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <data>
+        <import type="com.ang.acb.nasaapp.data.vo.Resource" />
+        <import type="com.ang.acb.nasaapp.data.vo.Resource.Status" />
+        <import type="com.ang.acb.nasaapp.ui.common.RetryCallback" />
+        <import type="com.ang.acb.nasaapp.data.vo.apod.Apod"/>
+
+        <variable name="resource" type="Resource" />
+        <variable name="retryCallback" type="RetryCallback" />
+        <variable name="apod" type="Apod" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/apod_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/apod_image" />
+            android:contentDescription="@string/apod_image"
+            app:setImage="@{apod.hdUrl}"
+            app:layout_constraintDimensionRatio="4:3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic"
+            app:toggleVisibility="@{apod != null || apod.url != null}"/>
 
         <TextView
             android:id="@+id/apod_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="@string/apod_title"/>
+            android:layout_height="0dp"
+            android:background="@android:color/black"
+            android:maxLines="2"
+            android:padding="@dimen/padding_normal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            android:text="@{apod.title}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/apod_image"
+            app:toggleVisibility="@{apod != null || apod.title != null}"
+            tools:text="@string/apod_title"/>
 
-        <TextView
-            android:id="@+id/apod_explanation"
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            tools:text="Description" />
-    </LinearLayout>
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="apod_title" />
 
-</ScrollView>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:toggleVisibility="@{apod != null || apod.explanation != null}">
+
+            <TextView
+                android:id="@+id/apod_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_normal"
+                android:text="@{apod.explanation}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                tools:text="@tools:sample/lorem/random" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include layout="@layout/network_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:resource="@{resource}"
+            app:retryCallback="@{() -> retryCallback.retry()}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

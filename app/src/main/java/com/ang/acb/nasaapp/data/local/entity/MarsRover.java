@@ -1,4 +1,4 @@
-package com.ang.acb.nasaapp.data.local;
+package com.ang.acb.nasaapp.data.local.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

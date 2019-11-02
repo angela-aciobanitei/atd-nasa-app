@@ -3,6 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="apod_image">Apod Image</string>
     <string name="apod_title">Title</string>
     <string name="earth_image">Earth Image</string>
@@ -13,4 +14,11 @@
     <string name="apod">Apod</string>
     <string name="mars">Mars Rover</string>
     <string name="earth">Earth</string>
+    <string name="search_hint">Martian Sol</string>
+    <string name="empty_search_result">No results for <b>%s</b></string>
+    <string name="search_result_count"><b>%s</b> results for <b>%s</b></string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="action_retry">Retry</string>
+    <string name="rover_title">PICK ROVER</string>
+    <string name="no_internet_msg">Unable to resolve host api.nasa.gov: No address associated with hostname</string>
 </resources>

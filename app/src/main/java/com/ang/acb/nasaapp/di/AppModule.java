@@ -5,7 +5,8 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.ang.acb.nasaapp.BuildConfig;
-import com.ang.acb.nasaapp.data.local.AppDatabase;
+import com.ang.acb.nasaapp.data.local.dao.ApodDao;
+import com.ang.acb.nasaapp.data.local.db.AppDatabase;
 import com.ang.acb.nasaapp.data.remote.ApiService;
 import com.ang.acb.nasaapp.utils.LiveDataCallAdapterFactory;
 
@@ -39,8 +40,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppModule {
 
     private final static String NASA_BASE_URL ="https://api.nasa.gov";
-    private final static String EPIC_BASE_URL ="https://epic.gsfc.nasa.gov";
-    private final static String IMAGE_LIBRARY_BASE_URL ="https://images-api.nasa.gov";
 
     @Provides
     @Singleton
@@ -51,7 +50,12 @@ public class AppModule {
                 .build();
     }
 
-    // TODO @Provides @Singleton provide DAOs
+    // TODO Provide DAOs
+    @Provides
+    @Singleton
+    ApodDao provideApodDao(AppDatabase database) {
+        return database.apodDao();
+    }
 
     @Provides
     @Singleton
@@ -66,9 +70,8 @@ public class AppModule {
                 Request original = chain.request();
                 HttpUrl originalHttpUrl = original.url();
 
-                // TODO Add API KEY
                 HttpUrl url = originalHttpUrl.newBuilder()
-                        .addQueryParameter("api_key", "")
+                        .addQueryParameter("api_key", BuildConfig.NASA_API_KEY)
                         .build();
 
                 Request request = original.newBuilder().url(url).build();
@@ -109,30 +112,6 @@ public class AppModule {
                 // return types other than Retrofit2.Call. We will use a custom
                 // Retrofit adapter that converts the Retrofit2.Call into a
                 // LiveData of ApiResponse.
-                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                .client(client)
-                .build()
-                .create(ApiService.class);
-    }
-
-    @Provides
-    @Singleton
-    ApiService provideEpicApiService(OkHttpClient client) {
-        return new Retrofit.Builder()
-                .baseUrl(EPIC_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                .client(client)
-                .build()
-                .create(ApiService.class);
-    }
-
-    @Provides
-    @Singleton
-    ApiService provideImageLibraryApiService(OkHttpClient client) {
-        return new Retrofit.Builder()
-                .baseUrl(IMAGE_LIBRARY_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(client)
                 .build()

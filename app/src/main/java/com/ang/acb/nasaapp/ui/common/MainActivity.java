@@ -47,10 +47,20 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
     }
 
     private void setupBottomNavigationView() {
+        // See: https://www.raywenderlich.com/4332831-navigation-component-for-android-part-2-graphs-and-deep-links
         BottomNavigationView bottomNavigationView = findViewById(R.id.main_bottom_navigation);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController);
+
+        ActionBar actionBar = getSupportActionBar();
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.apod) {
+                if(actionBar != null) actionBar.hide();
+            } else {
+                if(actionBar != null) actionBar.show();
+            }
+        });
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController);
     }
 
     @Override

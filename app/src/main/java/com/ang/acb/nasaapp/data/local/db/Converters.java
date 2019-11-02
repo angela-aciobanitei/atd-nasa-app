@@ -1,4 +1,4 @@
-package com.ang.acb.nasaapp.data.local;
+package com.ang.acb.nasaapp.data.local.db;
 
 import androidx.room.TypeConverter;
 
