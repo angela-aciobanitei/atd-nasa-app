@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="marsPhoto"
+            type="com.ang.acb.nasaapp.data.local.entity.MarsPhoto" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/mars_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/rover_image"
+            app:setImage="@{marsPhoto.imgSrc}"
+            app:toggleVisibility="@{marsPhoto.imgSrc != null}"
+            tools:src="@tools:sample/backgrounds/scenic"/>
+
+    </FrameLayout>
+</layout>

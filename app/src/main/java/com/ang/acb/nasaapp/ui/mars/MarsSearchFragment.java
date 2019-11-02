@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.IBinder;
@@ -19,11 +19,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import com.ang.acb.nasaapp.R;
-import com.ang.acb.nasaapp.data.local.entity.RoverPhoto;
+import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
 import com.ang.acb.nasaapp.databinding.FragmentMarsSearchBinding;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
 import com.ang.acb.nasaapp.utils.GridMarginDecoration;
@@ -36,10 +38,10 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class MarsSearchFragment extends Fragment {
 
-    private static final String ARG_ROOM_PHOTO_ID = "ARG_ROOM_PHOTO_ID";
+    public static final String ARG_MARS_PHOTO_ROOM_ID = "ARG_MARS_PHOTO_ROOM_ID";
 
     private FragmentMarsSearchBinding binding;
-    private RoverPhotosAdapter roverPhotosAdapter;
+    private MarsPhotosAdapter marsPhotosAdapter;
     private MarsSearchViewModel marsSearchViewModel;
 
     @Inject
@@ -83,21 +85,44 @@ public class MarsSearchFragment extends Fragment {
     private void initAdapter(){
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_count));
-        binding.rvRovers.setLayoutManager(layoutManager);
-        binding.rvRovers.addItemDecoration(new GridMarginDecoration(
+        binding.rvMarsPhotos.setLayoutManager(layoutManager);
+        binding.rvMarsPhotos.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
-        roverPhotosAdapter = new RoverPhotosAdapter(this::onPhotoClick);
-        binding.rvRovers.setAdapter(roverPhotosAdapter);
+        marsPhotosAdapter = new MarsPhotosAdapter(new MarsPhotosAdapter.MarsPhotoListener() {
+            @Override
+            public void onPhotoItemClick(MarsPhoto marsPhoto, ImageView sharedImage) {
+                // On photo click navigate to mars photo details fragment.
+                // Create the shared element transition extras.
+                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                        .addSharedElement(sharedImage, sharedImage.getTransitionName())
+                        .build();
+                Bundle args = new Bundle();
+                args.putLong(ARG_MARS_PHOTO_ROOM_ID, marsPhoto.getId());
+                NavHostFragment.findNavController(MarsSearchFragment.this)
+                        .navigate(R.id.action_mars_search_to_mars_photo_details,
+                                  args, null, extras);
+            }
+
+            @Override
+            public void onPhotoLoaded() {
+                // Before calling startPostponedEnterTransition(), make sure that
+                // the view is drawn using ViewTreeObserver's OnPreDrawListener.
+                // https://medium.com/@ayushkhare/shared-element-transitions-4a645a30c848
+                binding.rvMarsPhotos.getViewTreeObserver().addOnPreDrawListener(
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            binding.rvMarsPhotos.getViewTreeObserver().removeOnPreDrawListener(this);
+                            startPostponedEnterTransition();
+                            return true;
+                        }
+                    }
+                );
+            }
+        });
+        binding.rvMarsPhotos.setAdapter(marsPhotosAdapter);
     }
 
-    private void onPhotoClick(RoverPhoto roverPhoto) {
-        // On photo click navigate to rover photo details fragment.
-        Bundle args = new Bundle();
-        args.putLong(ARG_ROOM_PHOTO_ID, roverPhoto.getId());
-        NavHostFragment.findNavController(MarsSearchFragment.this)
-                .navigate(R.id.action_mars_search_to_mars_photo_details, args);
-
-    }
 
     private void initSearchInputListener() {
         binding.input.setOnEditorActionListener((view, actionId, event) -> {
@@ -136,11 +161,12 @@ public class MarsSearchFragment extends Fragment {
 
     private void populateUi() {
         marsSearchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result -> {
+            // TODO postponeEnterTransition();
             binding.setResource(result);
             int searchCount = (result == null || result.data == null) ? 0 : result.data.size();
             binding.setSearchCount(searchCount);
             if (result != null && result.data != null) {
-                roverPhotosAdapter.updateData(result.data);
+                marsPhotosAdapter.updateData(result.data);
             }
             binding.executePendingBindings();
         });

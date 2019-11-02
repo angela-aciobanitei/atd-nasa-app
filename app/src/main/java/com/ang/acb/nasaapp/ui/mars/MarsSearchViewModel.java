@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.nasaapp.data.local.entity.RoverPhoto;
-import com.ang.acb.nasaapp.data.repository.RoverPhotosRepository;
+import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
+import com.ang.acb.nasaapp.data.repository.MarsPhotosRepository;
 import com.ang.acb.nasaapp.data.vo.Resource;
 import com.ang.acb.nasaapp.utils.AbsentLiveData;
 
@@ -25,10 +25,10 @@ import javax.inject.Inject;
 public class MarsSearchViewModel extends ViewModel {
 
     private final MutableLiveData<String> query = new MutableLiveData<>();
-    private final LiveData<Resource<List<RoverPhoto>>> searchResults;
+    private final LiveData<Resource<List<MarsPhoto>>> searchResults;
 
     @Inject
-    MarsSearchViewModel(RoverPhotosRepository repository) {
+    MarsSearchViewModel(MarsPhotosRepository repository) {
         searchResults = Transformations.switchMap(query, search -> {
             if (search == null || search.trim().length() == 0) {
                 return AbsentLiveData.create();
@@ -38,7 +38,7 @@ public class MarsSearchViewModel extends ViewModel {
         });
     }
 
-    public LiveData<Resource<List<RoverPhoto>>> getSearchResults() {
+    public LiveData<Resource<List<MarsPhoto>>> getSearchResults() {
         return searchResults;
     }
 

@@ -23,7 +23,7 @@
             app:destination="@id/mars_photo_details"
             app:popUpTo="@+id/mars_search">
             <argument
-                android:name="photoRoomId"
+                android:name="marsPhotoId"
                 app:argType="long" />
         </action>
     </fragment>
@@ -31,8 +31,8 @@
     <fragment
         android:id="@+id/mars_photo_details"
         android:label="@string/mars"
-        android:name="com.ang.acb.nasaapp.ui.mars.RoverPhotoFragment"
-        tools:layout="@layout/fragment_rover_photo">
+        android:name="com.ang.acb.nasaapp.ui.mars.MarsPhotoFragment"
+        tools:layout="@layout/fragment_mars_photo">
     </fragment>
 
     <fragment

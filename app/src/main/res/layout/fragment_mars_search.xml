@@ -43,7 +43,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_rovers"
+            android:id="@+id/rv_mars_photos"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:padding="@dimen/grid_item_spacing"

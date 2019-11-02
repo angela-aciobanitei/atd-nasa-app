@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.ang.acb.nasaapp.BuildConfig;
-import com.ang.acb.nasaapp.data.local.dao.RoverPhotoDao;
+import com.ang.acb.nasaapp.data.local.dao.MarsPhotoDao;
 import com.ang.acb.nasaapp.data.local.db.AppDatabase;
 import com.ang.acb.nasaapp.data.remote.ApiService;
 import com.ang.acb.nasaapp.utils.LiveDataCallAdapterFactory;
@@ -53,7 +53,7 @@ public class AppModule {
     // TODO Provide DAOs here ...
     @Provides
     @Singleton
-    RoverPhotoDao provideRoverPhotoDao(AppDatabase database) {
+    MarsPhotoDao provideMarsPhotoDao(AppDatabase database) {
         return database.roverPhotoDao();
     }
 

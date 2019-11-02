@@ -5,8 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "rover_photo")
-public class RoverPhoto {
+@Entity(tableName = "mars_photo")
+public class MarsPhoto {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -23,7 +23,7 @@ public class RoverPhoto {
     @ColumnInfo(name = "earth_date")
     private String earthDate;
 
-    public RoverPhoto(long id, int nasaId, int sol, String imgSrc, String earthDate) {
+    public MarsPhoto(long id, int nasaId, int sol, String imgSrc, String earthDate) {
         this.id = id;
         this.nasaId = nasaId;
         this.sol = sol;
@@ -32,7 +32,7 @@ public class RoverPhoto {
     }
 
     @Ignore
-    public RoverPhoto(int nasaId, int sol, String imgSrc, String earthDate) {
+    public MarsPhoto(int nasaId, int sol, String imgSrc, String earthDate) {
         this.nasaId = nasaId;
         this.sol = sol;
         this.imgSrc = imgSrc;

@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="roverPhoto"
-            type="com.ang.acb.nasaapp.data.local.entity.RoverPhoto" />
+            name="marsPhoto"
+            type="com.ang.acb.nasaapp.data.local.entity.MarsPhoto" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/rover_item_image"
+                android:id="@+id/mars_photo_item_image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
                 tools:src="@tools:sample/backgrounds/scenic"/>
 
             <TextView
-                android:id="@+id/rover_item_date"
+                android:id="@+id/mars_photo_item_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -46,8 +46,8 @@
                 android:background="@color/titleBackground"
                 android:textColor="@color/imagePlaceholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:text="@{roverPhoto.earthDate}"
-                app:layout_constraintBottom_toBottomOf="@id/rover_item_image"
+                android:text="@{marsPhoto.earthDate}"
+                app:layout_constraintBottom_toBottomOf="@id/mars_photo_item_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="@tools:sample/date/ddmmyy"/>

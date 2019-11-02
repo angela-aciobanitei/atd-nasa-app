@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import com.ang.acb.nasaapp.data.local.db.AppDatabase;
-import com.ang.acb.nasaapp.data.local.entity.RoverPhoto;
-import com.ang.acb.nasaapp.data.local.entity.RoverSearchResult;
+import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
+import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
 import com.ang.acb.nasaapp.data.remote.ApiResponse;
 import com.ang.acb.nasaapp.data.remote.ApiService;
 import com.ang.acb.nasaapp.data.vo.Resource;
@@ -30,26 +30,26 @@ import timber.log.Timber;
  * See: https://github.com/googlesamples/android-architecture-components/tree/master/GithubBrowserSample
  */
 @Singleton
-public class RoverPhotosRepository {
+public class MarsPhotosRepository {
 
     private AppDatabase database;
     private ApiService apiService;
     private AppExecutors executors;
 
     @Inject
-    RoverPhotosRepository(AppDatabase database, ApiService apiService, AppExecutors executors) {
+    MarsPhotosRepository(AppDatabase database, ApiService apiService, AppExecutors executors) {
         this.database = database;
         this.apiService = apiService;
         this.executors = executors;
     }
 
-    public LiveData<Resource<List<RoverPhoto>>> searchRoverPhotos(String solQuery) {
+    public LiveData<Resource<List<MarsPhoto>>> searchRoverPhotos(String solQuery) {
         // Note that we are using the NetworkBoundResource<ResultType, RequestType> class
         // that we've created earlier which can provide a resource backed by both the
         // SQLite database and the network. It defines two type parameters, ResultType
         // and RequestType, because the data type used locally might not match the data
         // type returned from the API.
-        return new NetworkBoundResource<List<RoverPhoto>, RoverResponse>(executors) {
+        return new NetworkBoundResource<List<MarsPhoto>, RoverResponse>(executors) {
 
             @NonNull
             @Override
@@ -62,10 +62,10 @@ public class RoverPhotosRepository {
             protected void saveCallResult(@NonNull RoverResponse response) {
                 // Save the NASA API response into the database.
                 List<Integer> nasaPhotoIds = response.getNasaPhotoIds();
-                RoverSearchResult searchResult = new RoverSearchResult(solQuery, nasaPhotoIds);
+                MarsSearchResult searchResult = new MarsSearchResult(solQuery, nasaPhotoIds);
 
                 database.runInTransaction(() -> {
-                    long searchId = database.roverPhotoDao().insertRoverSearchResult(searchResult);
+                    long searchId = database.roverPhotoDao().insertMarsSearchResult(searchResult);
                     Timber.d("Inserted search result with ID= %s in the db", searchId);
                     int savedItems = database.roverPhotoDao().insertPhotosFromResponse(response);
                     Timber.d("Inserted %s rover photos in the db", savedItems);
@@ -74,7 +74,7 @@ public class RoverPhotosRepository {
 
             @NonNull
             @Override
-            protected LiveData<List<RoverPhoto>> loadFromDb() {
+            protected LiveData<List<MarsPhoto>> loadFromDb() {
                 Timber.d("Get the cached rover photos from the database");
                 return Transformations.switchMap(database.roverPhotoDao().search(solQuery), searchData -> {
                     if (searchData == null) return AbsentLiveData.create();
@@ -83,7 +83,7 @@ public class RoverPhotosRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<RoverPhoto> dbData) {
+            protected boolean shouldFetch(@Nullable List<MarsPhoto> dbData) {
                 return dbData == null || dbData.isEmpty();
             }
 
@@ -93,5 +93,9 @@ public class RoverPhotosRepository {
                 Timber.d("onFetchFailed");
             }
         }.asLiveData();
+    }
+
+    public LiveData<MarsPhoto> getMarsPhotoById(Long id) {
+        return database.roverPhotoDao().getMarsPhotoByRoomId(id);
     }
 }

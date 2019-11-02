@@ -8,8 +8,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.ang.acb.nasaapp.data.local.entity.RoverPhoto;
-import com.ang.acb.nasaapp.data.local.entity.RoverSearchResult;
+import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
+import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
 import com.ang.acb.nasaapp.data.vo.mars.PhotoItem;
 import com.ang.acb.nasaapp.data.vo.mars.RoverResponse;
 
@@ -17,29 +17,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Interface for database access on {@link RoverSearchResult} related operations.
+ * Interface for database access on {@link MarsSearchResult} related operations.
  *
  * See: https://medium.com/androiddevelopers/7-steps-to-room-27a5fe5f99b2
  * See: https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1
  */
 @Dao
-public abstract class RoverPhotoDao {
+public abstract class MarsPhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long insertRoverPhoto(RoverPhoto roverPhoto);
+    public abstract long insertMarsPhoto(MarsPhoto marsPhoto);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertRoverPhotos(List<RoverPhoto> photos);
+    public abstract void insertMarsPhotos(List<MarsPhoto> photos);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public  abstract long insertRoverSearchResult(RoverSearchResult search);
+    public  abstract long insertMarsSearchResult(MarsSearchResult search);
 
     public int insertPhotosFromResponse(RoverResponse response) {
         List<PhotoItem> photosItems = response.getPhotoItems();
         List<Long> roomPhotoIds = new ArrayList<>();
         for (PhotoItem photoItem : photosItems) {
             if (photoItem != null) {
-                roomPhotoIds.add(insertRoverPhoto(new RoverPhoto(
+                roomPhotoIds.add(insertMarsPhoto(new MarsPhoto(
                         photoItem.getId(),
                         photoItem.getSol(),
                         photoItem.getImgSrc(),
@@ -52,26 +52,26 @@ public abstract class RoverPhotoDao {
     }
 
     @Delete
-    public abstract void deleteRoverSearchResult(RoverSearchResult search);
+    public abstract void deleteMarsSearchResult(MarsSearchResult search);
 
     @Delete
-    public abstract void deleteRoverPhoto(RoverPhoto photo);
+    public abstract void deleteMarsPhoto(MarsPhoto photo);
 
-    @Query("DELETE FROM rover_photo WHERE id = :id")
-    public abstract void deleteRoverPhotoById(long id);
+    @Query("DELETE FROM mars_photo WHERE id = :id")
+    public abstract void deleteMarsPhotoById(long id);
 
-    @Query("SELECT * FROM rover_search_results WHERE `query` = :query")
-    public abstract LiveData<RoverSearchResult> search(String query);
+    @Query("SELECT * FROM mars_search_results WHERE `query` = :query")
+    public abstract LiveData<MarsSearchResult> search(String query);
 
-    @Query("SELECT * FROM rover_photo WHERE id = :id")
-    public abstract LiveData<RoverPhoto> getRoverPhotoByRoomId(long id);
-
-    @Transaction
-    @Query("SELECT * FROM rover_photo WHERE nasa_id = :nasaId")
-    public abstract LiveData<RoverPhoto> getRoverPhotoByNasaId(String nasaId);
+    @Query("SELECT * FROM mars_photo WHERE id = :id")
+    public abstract LiveData<MarsPhoto> getMarsPhotoByRoomId(long id);
 
     @Transaction
-    @Query("SELECT * FROM rover_photo WHERE nasa_id in (:nasaIds)")
-    public abstract LiveData<List<RoverPhoto>> loadRoverPhotosByNasaIds(List<Integer> nasaIds);
+    @Query("SELECT * FROM mars_photo WHERE nasa_id = :nasaId")
+    public abstract LiveData<MarsPhoto> getMarsPhotoByNasaId(String nasaId);
+
+    @Transaction
+    @Query("SELECT * FROM mars_photo WHERE nasa_id in (:nasaIds)")
+    public abstract LiveData<List<MarsPhoto>> loadRoverPhotosByNasaIds(List<Integer> nasaIds);
 
 }
