@@ -43,7 +43,7 @@ public class MarsPhotosRepository {
         this.executors = executors;
     }
 
-    public LiveData<Resource<List<MarsPhoto>>> searchRoverPhotos(String solQuery) {
+    public LiveData<Resource<List<MarsPhoto>>> searchMarsPhotos(String solQuery) {
         // Note that we are using the NetworkBoundResource<ResultType, RequestType> class
         // that we've created earlier which can provide a resource backed by both the
         // SQLite database and the network. It defines two type parameters, ResultType
@@ -65,20 +65,20 @@ public class MarsPhotosRepository {
                 MarsSearchResult searchResult = new MarsSearchResult(solQuery, nasaPhotoIds);
 
                 database.runInTransaction(() -> {
-                    long searchId = database.roverPhotoDao().insertMarsSearchResult(searchResult);
+                    long searchId = database.marsPhotoDao().insertMarsSearchResult(searchResult);
                     Timber.d("Inserted search result with ID= %s in the db", searchId);
-                    int savedItems = database.roverPhotoDao().insertPhotosFromResponse(response);
-                    Timber.d("Inserted %s rover photos in the db", savedItems);
+                    int savedItems = database.marsPhotoDao().insertPhotosFromResponse(response);
+                    Timber.d("Inserted %s Mars photos in the db", savedItems);
                 });
             }
 
             @NonNull
             @Override
             protected LiveData<List<MarsPhoto>> loadFromDb() {
-                Timber.d("Get the cached rover photos from the database");
-                return Transformations.switchMap(database.roverPhotoDao().search(solQuery), searchData -> {
+                Timber.d("Get the cached Mars photos from the database");
+                return Transformations.switchMap(database.marsPhotoDao().search(solQuery), searchData -> {
                     if (searchData == null) return AbsentLiveData.create();
-                    else return database.roverPhotoDao().loadRoverPhotosByNasaIds(searchData.nasaIds);
+                    else return database.marsPhotoDao().loadRoverPhotosByNasaIds(searchData.nasaIds);
                 });
             }
 
@@ -90,12 +90,12 @@ public class MarsPhotosRepository {
             @NonNull
             @Override
             protected void onFetchFailed() {
-                Timber.d("onFetchFailed");
+                Timber.d("searchMarsPhotos -> onFetchFailed");
             }
         }.asLiveData();
     }
 
     public LiveData<MarsPhoto> getMarsPhotoById(Long id) {
-        return database.roverPhotoDao().getMarsPhotoByRoomId(id);
+        return database.marsPhotoDao().getMarsPhotoByRoomId(id);
     }
 }

@@ -1,7 +1,6 @@
 package com.ang.acb.nasaapp.ui.mars;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
-import com.ang.acb.nasaapp.databinding.MarsPhotoItemBinding;
+import com.ang.acb.nasaapp.databinding.MarsPhotoBinding;
 import com.ang.acb.nasaapp.utils.GlideApp;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -37,24 +36,14 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate layout and get an instance of the binding class.
-        MarsPhotoItemBinding itemBinding = MarsPhotoItemBinding.inflate(
+        MarsPhotoBinding itemBinding = MarsPhotoBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false);
         return new MarsPhotoViewHolder(itemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Bind item data.
-        MarsPhoto marsPhoto = marsPhotos.get(position);
-        ((MarsPhotoViewHolder) holder).bindTo(marsPhoto);
-
-        // Handle item click events.
-        holder.itemView.setOnClickListener(view -> {
-            if (marsPhoto != null && photoListener != null) {
-                photoListener.onPhotoItemClick(marsPhoto,
-                        holder.itemView.findViewById(R.id.mars_photo_item_image) );
-            }
-        });
+        ((MarsPhotoViewHolder) holder).bindTo(marsPhotos.get(position));
     }
 
     @Override
@@ -75,10 +64,10 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     class MarsPhotoViewHolder extends RecyclerView.ViewHolder {
 
-        private MarsPhotoItemBinding binding;
+        private MarsPhotoBinding binding;
 
         // Required constructor matching super.
-        MarsPhotoViewHolder(@NonNull MarsPhotoItemBinding binding) {
+        MarsPhotoViewHolder(@NonNull MarsPhotoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -87,11 +76,11 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             // Bind data for this item.
             binding.setMarsPhoto(marsPhoto);
 
-            // Set the string value of the pin ID as the unique transition name
+            // TODO Set the string value of the Mars Photo ID as the unique transition name
             // for the image view that will be used in the shared element transition.
-            ViewCompat.setTransitionName(binding.marsPhotoItemImage, String.valueOf(marsPhoto.getId()));
+            // ViewCompat.setTransitionName(binding.ivMarsPhoto, String.valueOf(marsPhoto.getId()));
 
-            GlideApp.with(binding.marsPhotoItemImage.getContext())
+            GlideApp.with(binding.ivMarsPhoto.getContext())
                     // Calling GlideApp.with() returns a RequestBuilder.
                     // By default you get a Drawable RequestBuilder, but
                     // you can change the requested type using as... methods.
@@ -107,19 +96,28 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                     Target<Bitmap> target, boolean isFirstResource) {
+                            Timber.d("onLoadFailed, GlideException: %s", e.getMessage());
                             photoListener.onPhotoLoaded();
                             return false;
                         }
 
                         @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
-                                                       com.bumptech.glide.load.DataSource dataSource,
+                        public boolean onResourceReady(Bitmap resource, Object model,
+                                                       Target<Bitmap> target, DataSource source,
                                                        boolean isFirstResource) {
+                            Timber.d("onResourceReady, Image loaded: %s", marsPhoto.getId());
                             photoListener.onPhotoLoaded();
                             return false;
                         }
                     })
-                    .into(binding.marsPhotoItemImage);
+                    .into(binding.ivMarsPhoto);
+
+            // Handle item click events.
+            binding.getRoot().setOnClickListener(view -> {
+                if (photoListener != null) {
+                    photoListener.onPhotoItemClick(marsPhoto, binding.ivMarsPhoto);
+                }
+            });
 
             // Binding must be executed immediately.
             binding.executePendingBindings();

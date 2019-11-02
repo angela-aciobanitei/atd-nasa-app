@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
 
         ActionBar actionBar = getSupportActionBar();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.apod) {
+            if (destination.getId() == R.id.apod || destination.getId() == R.id.mars_photo_details) {
                 if(actionBar != null) actionBar.hide();
             } else {
                 if(actionBar != null) actionBar.show();

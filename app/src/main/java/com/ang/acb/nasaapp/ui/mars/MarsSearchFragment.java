@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 public class MarsSearchFragment extends Fragment {
 
@@ -75,10 +76,8 @@ public class MarsSearchFragment extends Fragment {
         handleRetryEvents();
     }
 
-
     private void initViewModel() {
-        marsSearchViewModel = ViewModelProviders
-                .of(getHostActivity(), viewModelFactory)
+        marsSearchViewModel = ViewModelProviders.of(getHostActivity(), viewModelFactory)
                 .get(MarsSearchViewModel.class);
     }
 
@@ -93,31 +92,19 @@ public class MarsSearchFragment extends Fragment {
             public void onPhotoItemClick(MarsPhoto marsPhoto, ImageView sharedImage) {
                 // On photo click navigate to mars photo details fragment.
                 // Create the shared element transition extras.
-                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                        .addSharedElement(sharedImage, sharedImage.getTransitionName())
-                        .build();
+                // FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                //        .addSharedElement(sharedImage, sharedImage.getTransitionName())
+                //        .build();
                 Bundle args = new Bundle();
                 args.putLong(ARG_MARS_PHOTO_ROOM_ID, marsPhoto.getId());
                 NavHostFragment.findNavController(MarsSearchFragment.this)
                         .navigate(R.id.action_mars_search_to_mars_photo_details,
-                                  args, null, extras);
+                                args, null, null);
             }
 
             @Override
             public void onPhotoLoaded() {
-                // Before calling startPostponedEnterTransition(), make sure that
-                // the view is drawn using ViewTreeObserver's OnPreDrawListener.
-                // https://medium.com/@ayushkhare/shared-element-transitions-4a645a30c848
-                binding.rvMarsPhotos.getViewTreeObserver().addOnPreDrawListener(
-                    new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            binding.rvMarsPhotos.getViewTreeObserver().removeOnPreDrawListener(this);
-                            startPostponedEnterTransition();
-                            return true;
-                        }
-                    }
-                );
+                // TODO startPostponedEnterTransition();
             }
         });
         binding.rvMarsPhotos.setAdapter(marsPhotosAdapter);

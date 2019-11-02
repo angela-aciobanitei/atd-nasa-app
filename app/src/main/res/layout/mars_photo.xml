@@ -24,7 +24,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/mars_photo_item_image"
+                android:id="@+id/iv_mars_photo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
                 tools:src="@tools:sample/backgrounds/scenic"/>
 
             <TextView
-                android:id="@+id/mars_photo_item_date"
+                android:id="@+id/tv_mars_photo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -47,7 +47,7 @@
                 android:textColor="@color/imagePlaceholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:text="@{marsPhoto.earthDate}"
-                app:layout_constraintBottom_toBottomOf="@id/mars_photo_item_image"
+                app:layout_constraintBottom_toBottomOf="@id/iv_mars_photo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="@tools:sample/date/ddmmyy"/>

@@ -30,7 +30,6 @@
 
     <fragment
         android:id="@+id/mars_photo_details"
-        android:label="@string/mars"
         android:name="com.ang.acb.nasaapp.ui.mars.MarsPhotoFragment"
         tools:layout="@layout/fragment_mars_photo">
     </fragment>

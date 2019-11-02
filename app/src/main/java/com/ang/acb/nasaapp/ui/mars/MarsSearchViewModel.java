@@ -33,7 +33,7 @@ public class MarsSearchViewModel extends ViewModel {
             if (search == null || search.trim().length() == 0) {
                 return AbsentLiveData.create();
             } else {
-                return repository.searchRoverPhotos(search);
+                return repository.searchMarsPhotos(search);
             }
         });
     }

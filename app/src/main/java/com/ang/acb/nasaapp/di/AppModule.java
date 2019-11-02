@@ -54,7 +54,7 @@ public class AppModule {
     @Provides
     @Singleton
     MarsPhotoDao provideMarsPhotoDao(AppDatabase database) {
-        return database.roverPhotoDao();
+        return database.marsPhotoDao();
     }
 
     @Provides

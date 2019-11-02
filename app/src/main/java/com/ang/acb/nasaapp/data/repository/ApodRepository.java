@@ -39,7 +39,7 @@ public class ApodRepository {
 
     public LiveData<Resource<Apod>> getApod() {
         // Send loading state to the UI.
-        result.setValue(Resource.loading(null));
+        result.postValue(Resource.loading(null));
 
         apiService.getApod().enqueue(new Callback<Apod>() {
             @Override
@@ -47,14 +47,14 @@ public class ApodRepository {
                 if (response.isSuccessful()) {
                     result.postValue(Resource.success(response.body()));
                 } else {
-                    Timber.d("onResponse: %s", response.code());
+                    Timber.d("getApod -> onResponse: %s", response.code());
                     result.postValue(Resource.error(response.message(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Apod> call, @NotNull Throwable throwable) {
-                Timber.d("onFailure: %s", throwable.getMessage());
+                Timber.d("getApod -> onFailure: %s", throwable.getMessage());
                 result.postValue(Resource.error(throwable.getMessage(), null));
             }
         });

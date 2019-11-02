@@ -3,13 +3,11 @@ package com.ang.acb.nasaapp.ui.mars;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.transition.TransitionInflater;
@@ -19,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ang.acb.nasaapp.R;
-import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
 import com.ang.acb.nasaapp.databinding.FragmentMarsPhotoBinding;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
 import com.ang.acb.nasaapp.utils.GlideApp;
@@ -62,9 +59,9 @@ public class MarsPhotoFragment extends Fragment {
             marsPhotoId = getArguments().getLong(ARG_MARS_PHOTO_ROOM_ID);
         }
 
-        postponeEnterTransition();
-        setSharedElementEnterTransition(TransitionInflater.from(getContext())
-                .inflateTransition(android.R.transition.move));
+        // TODO postponeEnterTransition();
+        // TODO setSharedElementEnterTransition(TransitionInflater.from(getContext())
+        //  .inflateTransition(android.R.transition.move));
 
     }
 
@@ -75,7 +72,7 @@ public class MarsPhotoFragment extends Fragment {
 
         // Set the string value of the pin ID as the unique transition name
         // for the image view that will be used in the shared element transition.
-        ViewCompat.setTransitionName(binding.marsPhoto, String.valueOf(marsPhotoId));
+        // TODO ViewCompat.setTransitionName(binding.marsPhoto, String.valueOf(marsPhotoId));
         return binding.getRoot();
     }
 
@@ -103,22 +100,15 @@ public class MarsPhotoFragment extends Fragment {
 
     private void loadPhoto(String photoUrl) {
         GlideApp.with(this)
-                // Calling GlideApp.with() returns a RequestBuilder.
-                // By default you get a Drawable RequestBuilder, but
-                // you can change the requested type using as... methods.
-                // For example, asBitmap() returns a Bitmap RequestBuilder.
                 .asBitmap()
                 .load(photoUrl)
-                // Tell Glide not to use its standard crossfade animation.
                 .dontAnimate()
-                // Display a placeholder until the image is loaded and processed.
                 .placeholder(R.color.imagePlaceholder)
-                // Keep track of errors and successful image loading.
                 .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                 Target<Bitmap> target, boolean isFirstResource) {
-                        startPostponedEnterTransition();
+                        // TODO startPostponedEnterTransition();
                         return false;
                     }
 
@@ -126,7 +116,7 @@ public class MarsPhotoFragment extends Fragment {
                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
                                                    com.bumptech.glide.load.DataSource dataSource,
                                                    boolean isFirstResource) {
-                        startPostponedEnterTransition();
+                        // TODO startPostponedEnterTransition();
                         return false;
                     }
                 })
