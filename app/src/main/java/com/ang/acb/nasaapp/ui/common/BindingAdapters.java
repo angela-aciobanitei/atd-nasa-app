@@ -1,6 +1,5 @@
 package com.ang.acb.nasaapp.ui.common;
 
-import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 

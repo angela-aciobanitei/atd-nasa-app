@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.ang.acb.nasaapp.BuildConfig;
-import com.ang.acb.nasaapp.data.local.dao.ApodDao;
+import com.ang.acb.nasaapp.data.local.dao.RoverPhotoDao;
 import com.ang.acb.nasaapp.data.local.db.AppDatabase;
 import com.ang.acb.nasaapp.data.remote.ApiService;
 import com.ang.acb.nasaapp.utils.LiveDataCallAdapterFactory;
@@ -50,11 +50,11 @@ public class AppModule {
                 .build();
     }
 
-    // TODO Provide DAOs
+    // TODO Provide DAOs here ...
     @Provides
     @Singleton
-    ApodDao provideApodDao(AppDatabase database) {
-        return database.apodDao();
+    RoverPhotoDao provideRoverPhotoDao(AppDatabase database) {
+        return database.roverPhotoDao();
     }
 
     @Provides
@@ -117,5 +117,4 @@ public class AppModule {
                 .build()
                 .create(ApiService.class);
     }
-
 }

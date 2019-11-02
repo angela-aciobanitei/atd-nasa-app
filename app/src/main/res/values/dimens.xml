@@ -8,4 +8,6 @@
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_large">24dp</dimen>
+    <dimen name="card_view_corner_radius">4dp</dimen>
+    <dimen name="grid_item_spacing">4dp</dimen>
 </resources>

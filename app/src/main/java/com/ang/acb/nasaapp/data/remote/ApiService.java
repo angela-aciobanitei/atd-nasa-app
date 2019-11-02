@@ -26,13 +26,12 @@ public interface ApiService {
     // Used for MARS section
     @GET
     Call<RoverResponse> getRoverImagesForCamera(@Url String url,
-                                           @Query("sol") String sol,
-                                           @Query("camera") String camera);
+                                                @Query("sol") String sol,
+                                                @Query("camera") String camera);
 
     // Used for MARS section
-    @GET
-    Call<RoverResponse> getRoverImagesCameraAll(@Url String url,
-                                              @Query("sol") String sol);
+    @GET("/mars-photos/api/v1/rovers/curiosity/photos?")
+    LiveData<ApiResponse<RoverResponse>> getRoverImagesCameraAll(@Query("sol") String sol);
 
     // Used for EARTH section
     @GET("/planetary/earth/assets")

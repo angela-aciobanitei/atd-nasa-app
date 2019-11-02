@@ -2,7 +2,7 @@ package com.ang.acb.nasaapp.di;
 
 import com.ang.acb.nasaapp.ui.apod.ApodFragment;
 import com.ang.acb.nasaapp.ui.earth.EarthImageFragment;
-import com.ang.acb.nasaapp.ui.mars.MarsImagesFragment;
+import com.ang.acb.nasaapp.ui.mars.RoverPhotoFragment;
 import com.ang.acb.nasaapp.ui.mars.MarsSearchFragment;
 
 import dagger.Module;
@@ -21,5 +21,5 @@ public abstract class FragmentBuildersModule {
     abstract MarsSearchFragment contributeMarsSearchFragment();
 
     @ContributesAndroidInjector
-    abstract MarsImagesFragment contributeMarsImagesFragment();
+    abstract RoverPhotoFragment contributeMarsImagesFragment();
 }

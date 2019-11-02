@@ -17,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import dagger.android.support.AndroidSupportInjection;
 
 
-public class MarsImagesFragment extends Fragment {
+public class RoverPhotoFragment extends Fragment {
 
     // Required empty public constructor
-    public MarsImagesFragment() {}
+    public RoverPhotoFragment() {}
 
     @Override
     public void onAttach(@NotNull Context context) {
@@ -32,6 +32,6 @@ public class MarsImagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mars_images, container, false);
+        return inflater.inflate(R.layout.fragment_rover_photo, container, false);
     }
 }

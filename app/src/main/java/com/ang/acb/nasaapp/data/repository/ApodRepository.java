@@ -47,14 +47,14 @@ public class ApodRepository {
                 if (response.isSuccessful()) {
                     result.postValue(Resource.success(response.body()));
                 } else {
-                    Timber.d("error code: %s", response.code());
+                    Timber.d("onResponse: %s", response.code());
                     result.postValue(Resource.error(response.message(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Apod> call, @NotNull Throwable throwable) {
-                Timber.d("unknown error: %s", throwable.getMessage());
+                Timber.d("onFailure: %s", throwable.getMessage());
                 result.postValue(Resource.error(throwable.getMessage(), null));
             }
         });

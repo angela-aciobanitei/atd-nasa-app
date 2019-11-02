@@ -4,17 +4,17 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.ang.acb.nasaapp.data.local.dao.ApodDao;
-import com.ang.acb.nasaapp.data.local.entity.MarsRover;
-import com.ang.acb.nasaapp.data.vo.apod.Apod;
+import com.ang.acb.nasaapp.data.local.dao.RoverPhotoDao;
+import com.ang.acb.nasaapp.data.local.entity.RoverPhoto;
+import com.ang.acb.nasaapp.data.local.entity.RoverSearchResult;
 
 /**
  * The Room database for this app.
  */
-@Database(entities = {Apod.class, MarsRover.class}, version = 3, exportSchema = false)
-@TypeConverters({Converters.class})
+@Database(entities = {RoverPhoto.class, RoverSearchResult.class}, version = 4, exportSchema = false)
+@TypeConverters({StringConverter.class, DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    //todo declare DAOs here
-    public abstract ApodDao apodDao();
+    // TODO Declare all DAOs here...
+    public abstract RoverPhotoDao roverPhotoDao();
 }
