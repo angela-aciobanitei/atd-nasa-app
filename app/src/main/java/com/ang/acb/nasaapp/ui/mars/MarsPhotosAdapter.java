@@ -106,7 +106,6 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         public boolean onResourceReady(Bitmap resource, Object model,
                                                        Target<Bitmap> target, DataSource source,
                                                        boolean isFirstResource) {
-                            Timber.d("onResourceReady, Image loaded: %s", marsPhoto.getId());
                             photoListener.onPhotoLoaded();
                             return false;
                         }

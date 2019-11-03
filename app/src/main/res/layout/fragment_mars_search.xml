@@ -26,10 +26,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginBottom="@dimen/margin_normal">
+            android:padding="@dimen/padding_normal">
 
             <EditText
                 android:id="@+id/input"
@@ -39,7 +36,7 @@
                 android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
                 android:hint="@string/search_hint"
-                tools:text="1000" />
+                tools:text="1000"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -50,7 +47,8 @@
             android:clipToPadding="false"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:toggleVisibility="@{resource.status == Status.SUCCESS}"/>
 
         <TextView
             android:id="@+id/no_results_text"

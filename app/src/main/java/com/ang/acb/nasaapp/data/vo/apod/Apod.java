@@ -1,16 +1,8 @@
 package com.ang.acb.nasaapp.data.vo.apod;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "apod")
 public class Apod {
-
-    @PrimaryKey(autoGenerate = true)
-    private long id;
 
     @SerializedName("date")
     private String date;
@@ -24,28 +16,17 @@ public class Apod {
     @SerializedName("url")
     private String url;
 
-    @ColumnInfo(name = "hd_url")
     @SerializedName("hdurl")
     private String hdUrl;
 
     @SerializedName("copyright")
     private String copyright;
 
-    @ColumnInfo(name = "media_type")
     @SerializedName("media_type")
     private String mediaType;
 
-    @ColumnInfo(name = "service_version")
     @SerializedName("service_version")
     private String serviceVersion;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getDate() {
         return date;

@@ -10,9 +10,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import com.ang.acb.nasaapp.BuildConfig;
 import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.databinding.ActivityMainBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
@@ -52,10 +53,16 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         // Specify the current activity as the lifecycle owner.
         binding.setLifecycleOwner(this);
 
-        // Setup toolbar
         setSupportActionBar(binding.mainToolbar);
-
         setupBottomNavigationView();
+
+        // See: https://github.com/googlemaps/android-places-demos
+        if (BuildConfig.NASA_API_KEY.equals("")) {
+            Snackbar.make(binding.mainToolbar,
+                          getString(R.string.error_api_key),
+                          Snackbar.LENGTH_LONG)
+                    .show();
+        }
     }
 
     private void setupBottomNavigationView() {

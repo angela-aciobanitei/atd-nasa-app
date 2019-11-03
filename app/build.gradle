@@ -86,7 +86,7 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.23.1'
 
     // Google Maps & Location Services
-    //https://developers.google.com/android/guides/releases
+    // https://developers.google.com/android/guides/releases
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 

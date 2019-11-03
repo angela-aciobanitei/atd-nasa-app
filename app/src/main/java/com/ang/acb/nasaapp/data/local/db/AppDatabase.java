@@ -11,7 +11,7 @@ import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
 /**
  * The Room database for this app.
  */
-@Database(entities = {MarsPhoto.class, MarsSearchResult.class}, version = 5, exportSchema = false)
+@Database(entities = {MarsPhoto.class, MarsSearchResult.class}, version = 7, exportSchema = false)
 @TypeConverters({StringConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 

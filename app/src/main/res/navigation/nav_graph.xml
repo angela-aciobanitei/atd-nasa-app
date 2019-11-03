@@ -8,7 +8,6 @@
 
     <fragment
         android:id="@+id/apod"
-        android:label="@string/apod"
         android:name="com.ang.acb.nasaapp.ui.apod.ApodFragment"
         tools:layout="@layout/fragment_apod">
     </fragment>
@@ -36,7 +35,7 @@
     <fragment
         android:id="@+id/earth"
         android:label="@string/earth"
-        android:name="com.ang.acb.nasaapp.ui.earth.EarthImageFragment"
+        android:name="com.ang.acb.nasaapp.ui.earth.EarthMapFragment"
         tools:layout="@layout/fragment_earth_image">
     </fragment>
 

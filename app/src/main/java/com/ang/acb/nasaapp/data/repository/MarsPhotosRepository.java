@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.data.local.db.AppDatabase;
 import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
 import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
@@ -54,21 +55,23 @@ public class MarsPhotosRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<RoverResponse>> createCall() {
-                Timber.d("Create call to NASA API.");
+                Timber.d("Create call to NASA API to get Mars Rover photos.");
                 return apiService.getRoverImagesCameraAll(solQuery);
             }
 
             @Override
             protected void saveCallResult(@NonNull RoverResponse response) {
-                // Save the NASA API response into the database.
+                // Save the NASA API response into the database using a WorkerThread
                 List<Integer> nasaPhotoIds = response.getNasaPhotoIds();
                 MarsSearchResult searchResult = new MarsSearchResult(solQuery, nasaPhotoIds);
 
-                database.runInTransaction(() -> {
-                    long searchId = database.marsPhotoDao().insertMarsSearchResult(searchResult);
-                    Timber.d("Inserted search result with ID= %s in the db", searchId);
-                    int savedItems = database.marsPhotoDao().insertPhotosFromResponse(response);
-                    Timber.d("Inserted %s Mars photos in the db", savedItems);
+                executors.diskIO().execute(() -> {
+                    database.runInTransaction(() -> {
+                        long searchId = database.marsPhotoDao().insertMarsSearchResult(searchResult);
+                        Timber.d("Inserted search result with ID= %s into the database.", searchId);
+                        int savedItems = database.marsPhotoDao().insertPhotosFromResponse(response);
+                        Timber.d("Inserted %s Mars photos into the database.", savedItems);
+                    });
                 });
             }
 

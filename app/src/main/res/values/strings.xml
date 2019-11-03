@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">NasaApp</string>
 
+    <string name="error_api_key" translatable="false">NASA API key not defined in gradle.properties</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
+    <string name="ok">OK</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -25,4 +30,8 @@
     <string name="mars">Mars</string>
     <string name="apod_toolbar_title">Astronomy Picture of the Day</string>
     <string name="mars_search_toolbar_title">Search Mars Photos</string>
+    <string name="settings">Settings</string>
+    <string name="map_not_ready">Map is not ready yet.</string>
+    <string name="search">Search</string>
+    <string name="earth_map_explanation">Drag the marker across the map to find a location, then press Search to get the photos from NASA Earth Imagery API.</string>
 </resources>
