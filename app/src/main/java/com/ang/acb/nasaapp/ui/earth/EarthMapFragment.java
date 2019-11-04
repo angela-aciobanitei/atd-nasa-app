@@ -160,14 +160,17 @@ public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void addMarkerToMap(double lat, double lng) {
+        markerLat = lat;
+        markerLng = lng;
+
         LatLng latLng = new LatLng(lat,lng);
 
         // Note: By default, a marker is not draggable, it must be set to be draggable.
         marker = map.addMarker(new MarkerOptions().position(latLng).draggable(true));
 
-        // Move the camera instantly to default marker with a zoom of 15.
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        // Move the camera instantly to default marker with a zoom of 1.
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 1));
+        map.animateCamera(CameraUpdateFactory.zoomTo(1), 2000, null);
 
         // Listen for drag events on the marker.
         map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {

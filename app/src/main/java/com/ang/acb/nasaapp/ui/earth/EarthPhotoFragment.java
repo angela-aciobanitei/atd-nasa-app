@@ -78,8 +78,8 @@ public class EarthPhotoFragment extends Fragment {
         viewModel = ViewModelProviders.of(getHostActivity(), viewModelFactory)
                 .get(EarthPhotoViewModel.class);
         // FIXME: For testing
-        viewModel.setPosition(new LatLng( 1.5, 100.75));
-        // viewModel.setPosition(new LatLng( latitude, longitude));
+        // viewModel.setPosition(new LatLng( 1.5, 100.75));
+        viewModel.setPosition(new LatLng( latitude, longitude));
     }
 
     private void observeResult() {
