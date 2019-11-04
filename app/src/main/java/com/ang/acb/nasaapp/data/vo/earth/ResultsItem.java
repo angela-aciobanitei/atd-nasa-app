@@ -10,7 +10,7 @@ class ResultsItem {
     @SerializedName("id")
     private String id;
 
-    private Image image;
+    private EarthImage image;
 
     public String getDate() {
         return date;
@@ -28,11 +28,11 @@ class ResultsItem {
         this.id = id;
     }
 
-    public Image getImage() {
+    public EarthImage getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(EarthImage image) {
         this.image = image;
     }
 }

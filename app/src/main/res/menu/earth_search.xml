@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/earth_search"
         android:title="@string/search"
-        android:icon="@drawable/ic_search"
-        android:iconTint="@android:color/white"
+        android:icon="@drawable/ic_searched_for"
         app:showAsAction="always"/>
 
 </menu>

@@ -14,15 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ang.acb.nasaapp.BuildConfig;
 import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
+import com.ang.acb.nasaapp.ui.mars.MarsSearchFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,28 +45,25 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
-public class EarthMapFragment extends Fragment implements
-        OnMapReadyCallback, LocationSource.OnLocationChangedListener {
+import static com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment.ARG_LATITUDE;
+import static com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment.ARG_LONGITUDE;
+
+public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
+                                      LocationSource.OnLocationChangedListener {
 
     private static final int LOCATION_PERMISSIONS_REQUEST_CODE = 123;
-
-    private static final LatLng BRISBANE = new LatLng(-27.47093, 153.0235);
-    private static final LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
-    private static final LatLng DARWIN = new LatLng(-12.4634, 130.8456);
-    private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
-    private static final LatLng ADELAIDE = new LatLng(-34.92873, 138.59995);
-    private static final LatLng PERTH = new LatLng(-31.952854, 115.857342);
-    private static final LatLng ALICE_SPRINGS = new LatLng(-24.6980, 133.8807);
 
     private FusedLocationProviderClient fusedLocationClient;
     private Location lastLocation;
     private GoogleMap map;
+    private Marker marker;
     private double markerLat;
     private double markerLng;
-
 
     // Required empty public constructor
     public EarthMapFragment() {}
@@ -69,6 +73,12 @@ public class EarthMapFragment extends Fragment implements
         // When using Dagger for injecting Fragments, inject as early as possible.
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -107,7 +117,6 @@ public class EarthMapFragment extends Fragment implements
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getHostActivity());
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Initialize the map.
@@ -130,11 +139,31 @@ public class EarthMapFragment extends Fragment implements
         }
     }
 
+    @SuppressWarnings("MissingPermission")
+    private void getLastLocation() {
+        fusedLocationClient.getLastLocation()
+                .addOnCompleteListener(getHostActivity(), task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        lastLocation = task.getResult();
+                        Timber.d("Last known location: " + lastLocation.getLatitude()
+                                + ", " + lastLocation.getLongitude());
+                        showSnackbar("Last known location:\n " + lastLocation.getLatitude()
+                                + ", " + lastLocation.getLongitude());
+                        addMarkerToMap(lastLocation.getLatitude(), lastLocation.getLongitude());
+                    } else {
+                        Timber.w("getLastLocation:exception: %s", task.getException());
+                        showSnackbar(getString(R.string.no_location_detected));
+                    }
+                })
+                .addOnFailureListener(getHostActivity(), exception ->
+                        Timber.w("getLastLocation:exception: %s", exception));
+    }
+
     private void addMarkerToMap(double lat, double lng) {
         LatLng latLng = new LatLng(lat,lng);
 
         // Note: By default, a marker is not draggable, it must be set to be draggable.
-        map.addMarker(new MarkerOptions().position(latLng).draggable(true));
+        marker = map.addMarker(new MarkerOptions().position(latLng).draggable(true));
 
         // Move the camera instantly to default marker with a zoom of 15.
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
@@ -159,30 +188,31 @@ public class EarthMapFragment extends Fragment implements
         });
     }
 
-    @SuppressWarnings("MissingPermission")
-    private void getLastLocation() {
-        fusedLocationClient.getLastLocation()
-                .addOnCompleteListener(getHostActivity(), task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        lastLocation = task.getResult();
-                        Timber.d("Last known location: " + lastLocation.getLatitude()
-                                + ", " + lastLocation.getLongitude());
-                        showSnackbar("Last known location:\n " + lastLocation.getLatitude()
-                                + ", " + lastLocation.getLongitude());
-                        addMarkerToMap(lastLocation.getLatitude(), lastLocation.getLongitude());
-                    } else {
-                        Timber.w("getLastLocation:exception: %s", task.getException());
-                        showSnackbar(getString(R.string.no_location_detected));
-                    }
-                })
-                .addOnFailureListener(getHostActivity(), exception ->
-                        Timber.w("getLastLocation:exception: %s", exception));
+    @Override
+    public void onLocationChanged(Location location) {
+        // Update marker position
+        marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        if (map != null) map.clear();
-        addMarkerToMap(location.getLatitude(), location.getLongitude());
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.earth_search, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.earth_search) {
+            // Navigate to earth photo details fragment.
+            Bundle args = new Bundle();
+            // FIXME: These are 0.0, 0.0...
+            args.putDouble(ARG_LATITUDE, markerLat);
+            args.putDouble(ARG_LONGITUDE, markerLng);
+            Timber.d("onOptionsItemSelected: %s, %s", markerLat, markerLng);
+            NavHostFragment.findNavController(EarthMapFragment.this)
+                    .navigate(R.id.action_earth_search_to_earth_photo_details, args);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean checkPermissions() {
@@ -232,16 +262,6 @@ public class EarthMapFragment extends Fragment implements
                 getLastLocation();
             } else {
                 // Permission denied.
-
-                // Notify the user via a SnackBar that they have rejected a core permission
-                // for the app, which makes the Activity useless. In a real app, core permissions
-                // would typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
                 showSnackbar(R.string.permission_denied_explanation, R.string.settings, view -> {
                     // Build intent that displays the App settings screen.
                     Intent intent = new Intent();

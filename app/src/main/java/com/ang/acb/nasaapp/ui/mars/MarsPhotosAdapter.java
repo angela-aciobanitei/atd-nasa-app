@@ -74,7 +74,7 @@ public class MarsPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bindTo(MarsPhoto marsPhoto) {
             // Bind data for this item.
-            binding.setMarsPhoto(marsPhoto);
+            binding.setMarsPhotoItem(marsPhoto);
 
             // Set the string value of the Mars Photo ID as the unique transition name
             // for the image view that will be used in the shared element transition.

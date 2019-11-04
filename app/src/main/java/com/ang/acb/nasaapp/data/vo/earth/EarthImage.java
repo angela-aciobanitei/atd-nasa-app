@@ -2,7 +2,7 @@ package com.ang.acb.nasaapp.data.vo.earth;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Image {
+public class EarthImage {
 
     @SerializedName("date")
     private String date;

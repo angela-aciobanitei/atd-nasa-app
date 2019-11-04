@@ -6,7 +6,7 @@
 
     <data>
         <variable
-            name="marsPhoto"
+            name="marsPhotoItem"
             type="com.ang.acb.nasaapp.data.local.entity.MarsPhoto" />
     </data>
 
@@ -47,7 +47,7 @@
                 android:background="@color/titleBackground"
                 android:textColor="@color/imagePlaceholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:text="@{marsPhoto.earthDate}"
+                android:text="@{marsPhotoItem.earthDate}"
                 app:layout_constraintBottom_toBottomOf="@id/iv_mars_photo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

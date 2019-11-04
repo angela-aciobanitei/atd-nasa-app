@@ -27,8 +27,6 @@ import com.bumptech.glide.request.target.Target;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;

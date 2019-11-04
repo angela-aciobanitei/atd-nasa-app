@@ -36,7 +36,24 @@
         android:id="@+id/earth"
         android:label="@string/earth"
         android:name="com.ang.acb.nasaapp.ui.earth.EarthMapFragment"
-        tools:layout="@layout/fragment_earth_image">
+        tools:layout="@layout/fragment_earth_map">
+        <action
+            android:id="@+id/action_earth_search_to_earth_photo_details"
+            app:destination="@id/earth_photo_details"
+            app:popUpTo="@+id/earth">
+            <argument
+                android:name="latitude"
+                app:argType="float" />
+            <argument
+                android:name="longitude"
+                app:argType="float" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/earth_photo_details"
+        android:name="com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment"
+        tools:layout="@layout/fragment_earth_photo">
     </fragment>
 
 </navigation>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.ang.acb.nasaapp.data.vo.Resource" />
+        <import type="com.ang.acb.nasaapp.data.vo.Resource.Status" />
+        <import type="com.ang.acb.nasaapp.ui.common.RetryCallback" />
+        <import type="com.ang.acb.nasaapp.data.vo.earth.EarthImage"/>
+
+        <variable name="resource" type="Resource" />
+        <variable name="retryCallback" type="RetryCallback" />
+        <variable name="earthPhoto" type="EarthImage" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/earth_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/apod_image"
+            app:setImage="@{earthPhoto.url}"
+            tools:src="@tools:sample/backgrounds/scenic"
+            app:toggleVisibility="@{earthPhoto != null || earthPhoto.url != null}"/>
+
+        <include layout="@layout/network_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_normal"
+            app:resource="@{resource}"
+            app:retryCallback="@{() -> retryCallback.retry()}"/>
+
+    </FrameLayout>
+</layout>

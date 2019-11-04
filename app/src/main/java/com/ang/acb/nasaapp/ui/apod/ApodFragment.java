@@ -61,11 +61,6 @@ public class ApodFragment extends Fragment {
         observeResult();
     }
 
-    private void setupToolbarTitle(String title) {
-        ActionBar actionBar = getHostActivity().getSupportActionBar();
-        if (actionBar != null) actionBar.setTitle(title);
-    }
-
     private void initViewModel() {
         apodViewModel = ViewModelProviders
                 .of(getHostActivity(), viewModelFactory)
@@ -82,6 +77,11 @@ public class ApodFragment extends Fragment {
             }
             binding.executePendingBindings();
         });
+    }
+
+    private void setupToolbarTitle(String title) {
+        ActionBar actionBar = getHostActivity().getSupportActionBar();
+        if (actionBar != null) actionBar.setTitle(title);
     }
 
     private MainActivity getHostActivity(){

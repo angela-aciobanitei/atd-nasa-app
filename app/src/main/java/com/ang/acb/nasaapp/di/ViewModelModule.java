@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ang.acb.nasaapp.ui.apod.ApodViewModel;
+import com.ang.acb.nasaapp.ui.earth.EarthPhotoViewModel;
 import com.ang.acb.nasaapp.ui.mars.MarsPhotoViewModel;
 import com.ang.acb.nasaapp.ui.mars.MarsSearchViewModel;
 
@@ -30,6 +31,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MarsPhotoViewModel.class)
     abstract ViewModel bindMarsPhotoViewModel(MarsPhotoViewModel marsPhotoViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EarthPhotoViewModel.class)
+    abstract ViewModel bindEarthPhotoViewModel(EarthPhotoViewModel earthPhotoViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
