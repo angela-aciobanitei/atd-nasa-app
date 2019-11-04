@@ -55,13 +55,17 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
 
         setSupportActionBar(binding.mainToolbar);
         setupBottomNavigationView();
+        checkForNasaApiKey();
+    }
 
+    private void checkForNasaApiKey() {
         // See: https://github.com/googlemaps/android-places-demos
         if (BuildConfig.NASA_API_KEY.equals("")) {
-            Snackbar.make(binding.mainToolbar,
-                          getString(R.string.error_api_key),
-                          Snackbar.LENGTH_LONG)
-                    .show();
+            Snackbar snackbar = Snackbar.make(
+                    this.findViewById(android.R.id.content),
+                    R.string.error_api_key, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(android.R.string.ok, view -> snackbar.dismiss());
+            snackbar.show();
         }
     }
 

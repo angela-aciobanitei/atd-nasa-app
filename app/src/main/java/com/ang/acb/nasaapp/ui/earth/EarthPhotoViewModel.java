@@ -1,6 +1,5 @@
 package com.ang.acb.nasaapp.ui.earth;
 
-import android.location.Location;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

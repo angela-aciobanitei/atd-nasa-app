@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
+
 
 public class MarsSearchFragment extends Fragment {
 
@@ -82,7 +82,6 @@ public class MarsSearchFragment extends Fragment {
         initAdapter();
         populateUi();
         initSearchInputListener();
-        handleRetryEvents();
     }
 
     private void setupToolbarTitle() {
@@ -191,6 +190,7 @@ public class MarsSearchFragment extends Fragment {
     private void populateUi() {
         marsSearchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result -> {
             binding.setResource(result);
+            binding.setRetryCallback(() -> marsSearchViewModel.retry());
             int searchCount = (result == null || result.data == null) ? 0 : result.data.size();
             binding.setSearchCount(searchCount);
             if (result != null && result.data != null) {
@@ -200,11 +200,6 @@ public class MarsSearchFragment extends Fragment {
             // Delay transition until all data is loaded.
             postponeEnterTransition();
         });
-    }
-
-    private void handleRetryEvents() {
-        // Handle retry event in case of network failure.
-        binding.setRetryCallback(() -> marsSearchViewModel.retry());
     }
 
     private MainActivity getHostActivity(){

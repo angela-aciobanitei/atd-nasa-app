@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.databinding.FragmentEarthPhotoBinding;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,7 +59,8 @@ public class EarthPhotoFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get an instance of the binding class.
         binding = FragmentEarthPhotoBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -77,8 +77,6 @@ public class EarthPhotoFragment extends Fragment {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(getHostActivity(), viewModelFactory)
                 .get(EarthPhotoViewModel.class);
-        // FIXME: For testing
-        // viewModel.setPosition(new LatLng( 1.5, 100.75));
         viewModel.setPosition(new LatLng( latitude, longitude));
     }
 

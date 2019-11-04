@@ -14,10 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.ang.acb.nasaapp.BuildConfig;
-import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.databinding.FragmentApodBinding;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
 

@@ -51,27 +51,14 @@ public abstract class MarsPhotoDao {
         return roomPhotoIds.size();
     }
 
-    @Delete
-    public abstract void deleteMarsSearchResult(MarsSearchResult search);
-
-    @Delete
-    public abstract void deleteMarsPhoto(MarsPhoto photo);
-
-    @Query("DELETE FROM mars_photo WHERE id = :id")
-    public abstract void deleteMarsPhotoById(long id);
-
     @Query("SELECT * FROM mars_search_results WHERE `query` = :query")
     public abstract LiveData<MarsSearchResult> search(String query);
 
     @Query("SELECT * FROM mars_photo WHERE id = :id")
-    public abstract LiveData<MarsPhoto> getMarsPhotoByRoomId(long id);
-
-    @Transaction
-    @Query("SELECT * FROM mars_photo WHERE nasa_id = :nasaId")
-    public abstract LiveData<MarsPhoto> getMarsPhotoByNasaId(String nasaId);
+    public abstract LiveData<MarsPhoto> loadMarsPhotoByRoomId(long id);
 
     @Transaction
     @Query("SELECT * FROM mars_photo WHERE nasa_id in (:nasaIds)")
-    public abstract LiveData<List<MarsPhoto>> loadRoverPhotosByNasaIds(List<Integer> nasaIds);
+    public abstract LiveData<List<MarsPhoto>> loadMarsPhotosByNasaIds(List<Integer> nasaIds);
 
 }

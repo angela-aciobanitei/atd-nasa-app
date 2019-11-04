@@ -19,22 +19,6 @@ public class StringConverter {
     // See: https://stackoverflow.com/questions/44986626/android-room-database-how-to-handle-arraylist-in-an-entity
 
     @TypeConverter
-    public static List<String> stringToStringList(String value) {
-        if (value == null) return Collections.emptyList();
-        // Get the type of the collection.
-        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-        // De-serialization
-        return new Gson().fromJson(value, listType);
-    }
-
-    @TypeConverter
-    public static String stringListToString(List<String> list) {
-        Gson gson = new Gson();
-        // Serialization
-        return gson.toJson(list);
-    }
-
-    @TypeConverter
     public static List<Integer> stringToIntegerList(String value) {
         if (value == null) return Collections.emptyList();
         // Get the type of the collection.

@@ -1,5 +1,6 @@
 package com.ang.acb.nasaapp.data.local.db;
 
+
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
@@ -15,6 +16,5 @@ import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
 @TypeConverters({StringConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    // TODO Declare all DAOs here...
     public abstract MarsPhotoDao marsPhotoDao();
 }

@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.data.local.db.AppDatabase;
 import com.ang.acb.nasaapp.data.local.entity.MarsPhoto;
 import com.ang.acb.nasaapp.data.local.entity.MarsSearchResult;
@@ -28,7 +27,7 @@ import timber.log.Timber;
  * Repository module for handling data operations.
  *
  * See: https://developer.android.com/jetpack/docs/guide#truth
- * See: https://github.com/googlesamples/android-architecture-components/tree/master/GithubBrowserSample
+ * See: https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample
  */
 @Singleton
 public class MarsPhotosRepository {
@@ -81,7 +80,7 @@ public class MarsPhotosRepository {
                 Timber.d("Get the cached Mars photos from the database");
                 return Transformations.switchMap(database.marsPhotoDao().search(solQuery), searchData -> {
                     if (searchData == null) return AbsentLiveData.create();
-                    else return database.marsPhotoDao().loadRoverPhotosByNasaIds(searchData.nasaIds);
+                    else return database.marsPhotoDao().loadMarsPhotosByNasaIds(searchData.nasaIds);
                 });
             }
 
@@ -99,6 +98,6 @@ public class MarsPhotosRepository {
     }
 
     public LiveData<MarsPhoto> getMarsPhotoById(Long id) {
-        return database.marsPhotoDao().getMarsPhotoByRoomId(id);
+        return database.marsPhotoDao().loadMarsPhotoByRoomId(id);
     }
 }

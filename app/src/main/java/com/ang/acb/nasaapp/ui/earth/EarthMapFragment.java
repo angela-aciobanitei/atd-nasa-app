@@ -14,8 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.provider.Settings;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import com.ang.acb.nasaapp.BuildConfig;
 import com.ang.acb.nasaapp.R;
 import com.ang.acb.nasaapp.ui.common.MainActivity;
-import com.ang.acb.nasaapp.ui.mars.MarsSearchFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +42,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
@@ -53,6 +49,12 @@ import timber.log.Timber;
 import static com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment.ARG_LATITUDE;
 import static com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment.ARG_LONGITUDE;
 
+
+/**
+ * A fragment that displays the last known location as a marker on a Google Map. The user can
+ * drag the marker to pick a location, then hit Search to get a photo from NASA Earth Imagery API.
+ * See: https://github.com/android/location-samples/tree/master/BasicLocation
+ */
 public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
                                       LocationSource.OnLocationChangedListener {
 
@@ -208,7 +210,6 @@ public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
         if (item.getItemId() == R.id.earth_search) {
             // Navigate to earth photo details fragment.
             Bundle args = new Bundle();
-            // FIXME: These are 0.0, 0.0...
             args.putDouble(ARG_LATITUDE, markerLat);
             args.putDouble(ARG_LONGITUDE, markerLng);
             Timber.d("onOptionsItemSelected: %s, %s", markerLat, markerLng);
@@ -277,14 +278,6 @@ public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
                 });
             }
         }
-    }
-
-    private void showExplanation() {
-        Snackbar snackbar = Snackbar.make(
-                getHostActivity().findViewById(android.R.id.content),
-                R.string.earth_map_explanation, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.ok, view -> snackbar.dismiss());
-        snackbar.show();
     }
 
     private void showSnackbar(final String text) {

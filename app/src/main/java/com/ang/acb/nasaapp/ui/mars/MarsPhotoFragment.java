@@ -128,8 +128,7 @@ public class MarsPhotoFragment extends Fragment {
 
     private void schedulePostponedEnterTransition() {
         // Before calling startPostponedEnterTransition(), make sure that the
-        // view is drawn first using ViewTreeObserver's OnPreDrawListener.
-        // See: https://www.androiddesignpatterns.com/2015/03/activity-postponed-shared-element-transitions-part3b.html
+        // view is drawn first by using ViewTreeObserver's OnPreDrawListener.
         binding.getRoot().getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override

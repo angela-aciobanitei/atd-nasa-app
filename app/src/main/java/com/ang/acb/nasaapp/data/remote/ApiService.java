@@ -3,7 +3,6 @@ package com.ang.acb.nasaapp.data.remote;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.nasaapp.data.vo.apod.Apod;
-import com.ang.acb.nasaapp.data.vo.earth.Assets;
 import com.ang.acb.nasaapp.data.vo.earth.EarthImage;
 import com.ang.acb.nasaapp.data.vo.mars.RoverResponse;
 

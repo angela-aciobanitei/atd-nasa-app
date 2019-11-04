@@ -1,19 +1,13 @@
 <resources>
     <string name="app_name">NasaApp</string>
 
-    <string name="error_api_key" translatable="false">NASA API key not defined in gradle.properties</string>
+    <string name="error_api_key" translatable="false">The NASA API key is not defined in gradle.properties</string>
     <string name="permission_rationale">Location permission is needed for core functionality</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
-    <string name="ok">OK</string>
     <string name="no_location_detected">No location detected. Make sure location is enabled on the device.</string>
 
     <string name="apod_image">Apod Image</string>
-    <string name="apod_title">Title</string>
     <string name="earth_image">Earth Image</string>
-    <string name="rover_grid_title">ROVER</string>
-    <string name="camera_grid_title">CAMERA</string>
-    <string name="sol_hint">Enter Martian sol here</string>
-    <string name="get_images">GET IMAGES</string>
     <string name="apod">APOD</string>
     <string name="mars_search">Mars Image Search</string>
     <string name="earth">Earth</string>
@@ -22,14 +16,10 @@
     <string name="search_result_count"><b>%s</b> results for <b>%s</b></string>
     <string name="unknown_error">Unknown error</string>
     <string name="action_retry">Retry</string>
-    <string name="rover_title">PICK ROVER</string>
     <string name="no_internet_msg">Unable to resolve host api.nasa.gov: No address associated with hostname</string>
     <string name="rover_image">Rover Item Image</string>
     <string name="mars">Mars</string>
-    <string name="apod_toolbar_title">Astronomy Picture of the Day</string>
     <string name="mars_search_toolbar_title">Search Mars Photos</string>
     <string name="settings">Settings</string>
-    <string name="map_not_ready">Map is not ready yet.</string>
     <string name="search">Search</string>
-    <string name="earth_map_explanation">Drag the marker across the map to find a location, then press Search to get photos.</string>
 </resources>
