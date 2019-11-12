@@ -53,7 +53,9 @@ import static com.ang.acb.nasaapp.ui.earth.EarthPhotoFragment.ARG_LONGITUDE;
 /**
  * A fragment that displays the last known location as a marker on a Google Map. The user can
  * drag the marker to pick a location, then hit Search to get a photo from NASA Earth Imagery API.
+ *
  * See: https://github.com/android/location-samples/tree/master/BasicLocation
+ * See: https://github.com/googlemaps/android-samples/blob/master/ApiDemos/java/app/src/main/java/com/example/mapdemo/MarkerDemoActivity.java
  */
 public class EarthMapFragment extends Fragment implements OnMapReadyCallback,
                                       LocationSource.OnLocationChangedListener {
